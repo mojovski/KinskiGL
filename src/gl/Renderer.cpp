@@ -19,13 +19,6 @@ namespace kinski{ namespace gl{
     
     using namespace glm;
     
-    struct matrixstruct_std140
-    {
-        mat4 modelViewMatrix;
-        mat4 modelViewProjectionMatrix;
-        mat3 normalMatrix;
-    };
-    
     struct lightstruct_std140
     {
         vec3 position;
@@ -87,16 +80,14 @@ namespace kinski{ namespace gl{
         {
             Mesh *m = item.mesh;
             
-            const glm::mat4 &modelView = item.transform;
-            mat4 mvp_matrix = cam->getProjectionMatrix() * modelView;
-            mat3 normal_matrix = glm::inverseTranspose(glm::mat3(modelView));
+//            const glm::mat4 &modelView = item.transform;
+//            mat4 mvp_matrix = cam->getProjectionMatrix() * modelView;
+//            mat3 normal_matrix = glm::inverseTranspose(glm::mat3(modelView));
+            
+            update_uniform_buffer_matrices(item.transform, cam->getProjectionMatrix());
             
             for(auto &mat : m->materials())
             {
-                mat->uniform("u_modelViewMatrix", modelView);
-                mat->uniform("u_modelViewProjectionMatrix", mvp_matrix);
-                mat->uniform("u_normalMatrix", normal_matrix);
-
                 if(m->geometry()->hasBones())
                 {
                     mat->uniform("u_bones", m->boneMatrices());
@@ -110,9 +101,13 @@ namespace kinski{ namespace gl{
                 block_index = mat->shader().getUniformBlockIndex("MaterialBlock");
                 glUniformBlockBinding(mat->shader().getHandle(), block_index, MATERIAL_BLOCK);
                 
-//                block_index = mat->shader().getUniformBlockIndex("MatrixBlock");
-//                glUniformBlockBinding(mat->shader().getHandle(), block_index, MATRIX_BLOCK);
+                block_index = mat->shader().getUniformBlockIndex("MatrixBlock");
+                glUniformBlockBinding(mat->shader().getHandle(), block_index, MATRIX_BLOCK);
 #else
+                mat->uniform("u_modelViewMatrix", modelView);
+                mat->uniform("u_modelViewProjectionMatrix", mvp_matrix);
+                mat->uniform("u_normalMatrix", normal_matrix);
+                
                 set_light_uniforms(mat, light_list);
 #endif
             }
@@ -246,13 +241,20 @@ namespace kinski{ namespace gl{
     void Renderer::update_uniform_buffer_matrices(const glm::mat4 &model_view,
                                                   const glm::mat4 &projection)
     {
+        struct matrixstruct_std140
+        {
+            mat4 modelViewMatrix;
+            mat4 modelViewProjectionMatrix;
+            mat4 light_mvp[4];
+            mat3 normalMatrix;
+        } matrix_struct;
+        
 #ifndef KINSKI_GLES
         if(!m_uniform_buffer[MATRIX_UNIFORM_BUFFER])
         {
             m_uniform_buffer[MATRIX_UNIFORM_BUFFER] = gl::Buffer(GL_UNIFORM_BUFFER, GL_DYNAMIC_DRAW);
         }
         
-        matrixstruct_std140 matrix_struct;
         matrix_struct.modelViewMatrix = model_view;
         matrix_struct.modelViewProjectionMatrix = projection * model_view;
         matrix_struct.normalMatrix = glm::inverseTranspose(glm::mat3(model_view));

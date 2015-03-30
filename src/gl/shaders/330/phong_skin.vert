@@ -1,8 +1,12 @@
 #version 410
 
-uniform mat4 u_modelViewMatrix; 
-uniform mat4 u_modelViewProjectionMatrix; 
-uniform mat3 u_normalMatrix; 
+layout(std140) uniform MatrixBlock
+{
+  mat4 u_modelViewMatrix;
+  mat4 u_modelViewProjectionMatrix;
+  mat4 u_light_mvp[4];
+  mat3 u_normalMatrix;
+}; 
 uniform mat4 u_textureMatrix; 
 uniform mat4 u_bones[110]; 
 

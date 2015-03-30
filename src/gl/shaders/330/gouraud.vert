@@ -58,9 +58,13 @@ vec4 shade(in Lightsource light, in Material mat, in vec3 normal, in vec3 eyeVec
   return base_color * (ambient + diffuse) + spec; 
 }
 
-uniform mat4 u_modelViewMatrix; 
-uniform mat4 u_modelViewProjectionMatrix; 
-uniform mat3 u_normalMatrix; 
+layout(std140) uniform MatrixBlock
+{
+  mat4 u_modelViewMatrix;
+  mat4 u_modelViewProjectionMatrix;
+  mat4 u_light_mvp[4];
+  mat3 u_normalMatrix;
+}; 
 uniform mat4 u_textureMatrix;
 
 layout(std140) uniform MaterialBlock

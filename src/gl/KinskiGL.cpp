@@ -880,6 +880,9 @@ void drawTransform(const glm::mat4& the_transform, float the_scale)
 #if !defined(KINSKI_GLES)
             GLuint block_index = mat->shader().getUniformBlockIndex("MaterialBlock");
             glUniformBlockBinding(mat->shader().getHandle(), block_index, 0);
+            
+            block_index = mat->shader().getUniformBlockIndex("MatrixBlock");
+            glUniformBlockBinding(mat->shader().getHandle(), block_index, 2);
 #endif
         }
         gl::apply_material(theMesh->material());
