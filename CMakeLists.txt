@@ -4,6 +4,7 @@ project (kinskiGL)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules
                       ${CMAKE_MODULE_PATH})
+SET(GLFW_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/modules/glfw/include)
 
 # Allow the developer to select if Dynamic or Static libraries are built
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)

@@ -41,9 +41,18 @@
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 #else
+//original from Fabian
 #define GLCOREARB_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glcorearb.h>
 #include <GL/glext.h>
+
+/*#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#include <GL/glfw.h>
+*/
 #endif
 
 // crossplattform helper-macros to append either nothing or "OES"
