@@ -53,6 +53,8 @@ IF( APPLE )
     SET(GLFW_LIBRARIES ${GLFW_LIBRARIES} ${IOKIT} ${COREVIDEO} ${COCOA})
 endif( APPLE )
 
+#get these via pkg-config --libs --cflags --print-requires-private glfw3 
+set(GLFW_LIBRARIES ${GLFW_LIBRARIES} "Xxf86vm;X11;Xrandr;Xi;Xinerama;Xcursor")
 IF(GLFW_LIBRARIES AND GLFW_INCLUDE_DIRS)
   SET(GLFW_FOUND TRUE)
   message(STATUS "Found GLFW3: ${GLFW_LIBRARIES}")

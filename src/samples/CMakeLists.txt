@@ -8,7 +8,7 @@ FOREACH(folderItem ${FOLDER_CONTENT})
 
         STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" itemName ${folderItem})
                 
-        MESSAGE("adding sample: '${itemName}'")
+        MESSAGE("adding sample: '${itemName}' in ${folderItem}")
 
         # include optional CMakeLists.txt in sample folder
         FILE(GLOB CMAKELISTS_EXIST "${folderItem}/CMakeLists.txt")

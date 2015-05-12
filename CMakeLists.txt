@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (kinskiGL)
+CMAKE_POLICY( SET CMP0003 OLD )
 
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules
                       ${CMAKE_MODULE_PATH})
@@ -42,6 +43,10 @@ set(LIBS ${LIBS} ${Boost_LIBRARIES})
 
 #glfw3
 INCLUDE_DIRECTORIES(${GLFW_INCLUDE_DIRS})
+#find_package(Xxf86vm REQUIRED)
+set(LIBS ${LIBS} ${GLFW_LIBRARIES})
+
+#link_directories("/usr/lib/x86_64-linux-gnu")
 
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING

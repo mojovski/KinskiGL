@@ -45,6 +45,8 @@ private:
 class KINSKI_API OrthographicCamera : public Camera
 {
 public:
+    OrthographicCamera(float left, float right, float bottom, float top,
+                       float near, float far);
     
     typedef std::shared_ptr<OrthographicCamera> Ptr;
     
@@ -98,8 +100,7 @@ protected:
     
 private:
     
-    OrthographicCamera(float left, float right, float bottom, float top,
-                       float near, float far);
+    
     
     float m_left, m_right, m_bottom, m_top, m_near, m_far;
 };

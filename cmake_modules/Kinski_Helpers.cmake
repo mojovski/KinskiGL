@@ -3,7 +3,7 @@ function(KINSKI_ADD_SAMPLE theName thePath)
     foreach(module ${ARGV2})
       KINSKI_ADD_MODULE(${module} MODULE_SOURCES)
       SET(MODULE_FILES ${MODULE_FILES} ${MODULE_SOURCES})
-      #message("adding module ${module} with files: ${MODULE_SOURCES}")
+      #message(STATUS "adding module ${module} with files: ${MODULE_SOURCES}")
     endforeach(module)
 
     FILE(GLOB FOLDER_SOURCES "${thePath}/*.c*" "${thePath}/*.mm")
@@ -15,26 +15,35 @@ function(KINSKI_ADD_SAMPLE theName thePath)
     SOURCE_GROUP("Header Files" FILES ${FOLDER_HEADERS})
 
     INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
-    
+    #LINK_DIRECTORIES("/usr/lib/x86_64-linux-gnu")
+
     IF( APPLE )
-    SET_SOURCE_FILES_PROPERTIES(
-        icon.icns
-        ${resFiles}
-        PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-    )
-    SET( MACOSX_BUNDLE_ICON_FILE icon.icns)
-    ADD_EXECUTABLE(${theName} MACOSX_BUNDLE ${FOLDER_SOURCES} ${FOLDER_HEADERS}
-            ${MODULE_FILES} ${resFiles})
+      SET_SOURCE_FILES_PROPERTIES(
+          icon.icns
+          ${resFiles}
+          PROPERTIES
+          MACOSX_PACKAGE_LOCATION Resources
+      )
+      SET( MACOSX_BUNDLE_ICON_FILE icon.icns)
+      ADD_EXECUTABLE(${theName} MACOSX_BUNDLE ${FOLDER_SOURCES} ${FOLDER_HEADERS}
+              ${MODULE_FILES} ${resFiles})
     ELSE( APPLE )
-    if(KINSKI_RASPI)
-      include_directories("/opt/vc/include/" "/opt/vc/include/interface/vcos/pthreads"
-        "/opt/vc/include/interface/vmcs_host/linux" ) 
-      link_directories("/opt/vc/lib")
-      
-    endif(KINSKI_RASPI)
-    add_executable(${theName} ${FOLDER_SOURCES} ${FOLDER_HEADERS} ${MODULE_FILES})
+      if(KINSKI_RASPI)
+        include_directories("/opt/vc/include/" "/opt/vc/include/interface/vcos/pthreads"
+          "/opt/vc/include/interface/vmcs_host/linux" ) 
+        link_directories("/opt/vc/lib")
+        
+      endif(KINSKI_RASPI)
+
+      get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY LINK_DIRECTORIES)
+      foreach(dir ${dirs})
+        message(STATUS "link dir='${dir}'")
+      endforeach()
+
+      add_executable(${theName} ${FOLDER_SOURCES} ${FOLDER_HEADERS} ${MODULE_FILES})
     ENDIF( APPLE )
+
+    
 
     target_link_libraries (${theName} ${LIBS})
 
