@@ -40,6 +40,9 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${Boost_LIBRARIES})
 #####
 
+#glfw3
+INCLUDE_DIRECTORIES(${GLFW_INCLUDE_DIRS})
+
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
